@@ -63,12 +63,14 @@ class Process(e.Element):
         print(f'failure = {str(self.failure)}, queue_length = {str(self.queue)}')
 
     def calculate(self, delta):
+        curr_mean = 0
+
         self.mean_queue += self.queue * delta
 
         if self.queue > self.max_observed_queue:
             self.max_observed_queue = self.queue
 
         for i in range(self.channel):
-            self.mean_load += self.state[i] * delta
-
-        self.mean_load = self.mean_load / self.channel
+            curr_mean += self.state[i] * delta
+    
+        self.mean_load += curr_mean / self.channel
